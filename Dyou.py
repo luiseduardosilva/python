@@ -1,4 +1,4 @@
-import urllib.request, urllib.error, pytube.exceptions
+import urllib.request, urllib.error, pytube.exceptions, sys
 from pytube import YouTube
 from pprint import pprint
 
@@ -6,9 +6,10 @@ from pprint import pprint
 # pip install pytube
 
 print("""
-	[\033[36m+\033[0;0m] Baixar videos do Youtube - Dyou.py 1.0v
+	[\033[36m+\033[0;0m] Baixar videos do Youtube - Dyou.py 1.1v
 	[\033[36m+\033[0;0m] By : \033[36mLuisSilva\033[0;0m
-	[\033[36m+\033[0;0m] Pasta padrão : tmp
+	[\033[36m+\033[0;0m] Pasta padrão Linux : tmp
+	[\033[36m+\033[0;0m] Pasta padrão Windows : temp
 	""")
 
 def Dyou():
@@ -31,8 +32,24 @@ def Dyou():
 			print ("Você escolheu :\033[36m", formato+", "+resolucao, "\033[0;0m")
 			video = url.get(formato, resolucao)
 			print("[Baixando...!]")
-			video.download("/tmp/")
-			print("[Download concluido]")
+			
+			if sys.platform == "linux":
+				try:
+					video.download("/tmp/")
+					print("[Download concluido]")
+				except OSError:
+					print("Arquivo já existente!")
+			
+			elif sys.platform == "win32":
+				try:
+					video.download("/temp/")
+					print("[Download concluido]")
+				except OSError:
+					print("Arquivo já existente!")
+			
+			else:
+				print("[ERRO!?]")
+		
 		except pytube.exceptions.DoesNotExist:
 			print("Formato não valido!")
 
