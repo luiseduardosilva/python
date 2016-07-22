@@ -794,19 +794,22 @@ lista = ("/phpMyAdmin/",
 "ss_vms_admin_sm/")
 
 def abrir():
-	url = input("HOST --> www.exemplo.com.br\n")
+	url = input("HOST --> www.exemplo.com.br\n\t")
 	if not "https://" in url:
 		url = "https://"+url
 	
 	for resp in lista:
 		try:
 			urllib.request.urlopen(url+"/"+resp)
-			print("\033[96mHOST --------->\033[0;0m", "\033[92m", url+"/"+resp, "\033[0;0m", "\033[96m[Ok]\033[0;0m")
+			print("\033[96mHOST ---------->\033[0;0m", "\033[92m", url+"/"+resp, "\033[0;0m", "\033[96m[Ok]\033[0;0m")
 			pass
 
 		except (urllib.error.HTTPError, urllib.error.URLError, urllib.error.ContentTooShortError):
 			print("HOST --> ", url+"/"+resp,"\033[91m[Not found]\033[0;0m")
 			pass
 
+		except KeyboardInterrupt:
+			print("")
+			exit()
 run()
 abrir()
