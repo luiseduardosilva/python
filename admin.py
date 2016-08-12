@@ -1,8 +1,8 @@
-import urllib.request, urllib.error
+import urllib.request, urllib.error, ssl
 
 def load():
 	print("""
-		[\033[36m+\033[0;0m] Admin.py 2.0v
+		[\033[36m+\033[0;0m] Admin.py 2.1v
 		[\033[36m+\033[0;0m] By : \033[36mLuisSilva\033[0;0m
 		[\033[36m+\033[0;0m] Python3.x
 		""")
@@ -794,25 +794,51 @@ lista = ("phpMyAdmin/",
 "ss_vms_admin_sm/")
 
 def run():
-	url = input("HOST --> www.exemplo.com.br\n\t")
-	if not "https://" in url:
-		url = "https://"+url
+	try:
+		url = input("\tHOST --> www.exemplo.com.br\n\t\t")
+		if not "https://" in url:
+			url1 = "https://"+url
+
+	except KeyboardInterrupt:
+		print("")
+		exit()
 
 	for resp in lista:
 		try:
-			urllib.request.urlopen(url+"/"+resp)
-			print("\033[96m HOST ---------->\033[0;0m", "\033[92m", url+"/"+resp, "\033[0;0m", "\033[96m[Ok]\033[0;0m")
+			urllib.request.urlopen(url1+"/"+resp)
+			print("\033[96m HOST ---------->\033[0;0m", "\033[92m", url1+"/"+resp, "\033[0;0m", "\033[96m[Ok]\033[0;0m")
 			# Save all url's found in adminlist.txt
 			arquivo = open("adminlist.txt", "a+")
-			arquivo.write(str(url+"/"+resp+"\n"))
+			arquivo.write(str(url1+"/"+resp+"\n"))
 			pass
 
 		except (urllib.error.HTTPError, urllib.error.URLError, urllib.error.ContentTooShortError):
 			print("HOST --> ", url+"/"+resp,"\033[91m[Not found]\033[0;0m")
 			pass
 
-		except KeyboardInterrupt:
+		except (KeyboardInterrupt):
 			print("")
 			exit()
+			
+		except ssl.CertificateError:
+			print("\t\t[\033[2mHTTP\033[0;0m]")
+			
+			url = "http://"+url	
+			for resp in lista:
+				try:
+					urllib.request.urlopen(url+"/"+resp)
+					print("\033[96m HOST ---------->\033[0;0m", "\033[92m", url+"/"+resp, "\033[0;0m", "\033[96m[Ok]\033[0;0m")
+					# Save all url's found in adminlist.txt
+					arquivo = open("adminlist.txt", "a+")
+					arquivo.write(str(url+"/"+resp+"\n"))
+					pass
+
+				except (urllib.error.HTTPError, urllib.error.URLError, urllib.error.ContentTooShortError):
+					print("HOST --> ", url+"/"+resp,"\033[91m[Not found]\033[0;0m")
+					pass
+				
+				except (KeyboardInterrupt):
+					print("")
+					exit()
 load()
 run()
